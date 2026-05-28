@@ -19,7 +19,7 @@ pkgs.dockerTools.buildImage {
     paths = [
       csharpTestApp
       pkgs.microsoft-edge
-      pkgs.edgedriver
+      pkgs.msedgedriver
       pkgs.ffmpeg-headless
       pkgs.xorg.xorgserver
       pkgs.dejavu_fonts

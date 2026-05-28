@@ -9,11 +9,19 @@
     { self, nixpkgs }:
     let
       system = "x86_64-linux";
-      pkgs = import nixpkgs { inherit system; };
+      pkgs = import nixpkgs {
+        inherit system;
+        config = {
+          allowUnfree = true;
+        };
+      };
     in
     {
-      devshells.${system}.default = import ./shell.nix { inherit pkgs; };
+      devShells.${system}.default = import ./shell.nix { inherit pkgs; };
 
-      packages.${system}.dockerImage = import ./docker-build.nix { inherit pkgs; };
+      packages.${system} = {
+        dockerImage = import ./docker-build.nix { inherit pkgs; };
+        default = self.packages.${system}.dockerImage;
+      };
     };
 }
