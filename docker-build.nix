@@ -1,13 +1,15 @@
-{ pkgs } :
+{ pkgs, buildDotnetModule, dotnetCorePackages, ffmpeg } :
 
 let
   csharpTestApp = pkgs.buildDotnetModule {
     pname = "nix-selenium";
-    version = "1.0.0";
+    projectFile = "src.project.sln"
+    version = "0.1";
     src = ./.;
-    dotnet-sdk = pkgs.dotnet-sdk_8;
-    dotnet-runtime = pkgs.dotnet-runtime_8;
-    nugetDeps = ./nuget-deps.nix;
+    dotnet-sdk = dotnetCorePackages.sdk_8_0;
+    dotnet-runtime = dotnetCorePackages.runtime_8_0;
+    nugetDeps = ./nuget-deps.json;
+    packNupkg = true;
   };
 in
 pkgs.dockerTools.buildImage {
