@@ -1,9 +1,9 @@
-{ pkgs, buildDotnetModule, dotnetCorePackages, ffmpeg } :
+{ pkgs, buildDotnetModule, dotnetCorePackages } :
 
 let
-  csharpTestApp = pkgs.buildDotnetModule {
+  nix-selenium-app = buildDotnetModule {
     pname = "nix-selenium";
-    projectFile = "src.project.sln"
+    projectFile = "nix-selenium.sln";
     version = "0.1";
     src = ./.;
     dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -19,7 +19,7 @@ pkgs.dockerTools.buildImage {
   copyToRoot = pkgs.buildEnv {
     name = "image-root";
     paths = [
-      csharpTestApp
+      nix-selenium-app
       pkgs.microsoft-edge
       pkgs.msedgedriver
       pkgs.ffmpeg-headless
@@ -33,15 +33,15 @@ pkgs.dockerTools.buildImage {
   extraCommands = ''
     mkdir -p tmp
     mkdir -p dev
-  ''
+  '';
   
   config = {
-    Entrypoint = [ "${csharpTestApp}/bin/nix-selenium" ]
+    Entrypoint = [ "${nix-selenium-app}/bin/nix-selenium" ];
     Env = [
       "PATH=/bin"
       "DISPLAY=:99"
       "CHROME_PATH=/bin/microsoft-edge"
       "CHROMEDRIVER_PATH=bin/edgedriver"
-    ]
+    ];
   };
 }

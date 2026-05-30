@@ -1,0 +1,8 @@
+[language-server.omnisharp]
+command = "OmniSharp"
+args = ["--languageserver", "--hostPID", "0"]
+
+[[language]]
+name = "c-sharp"
+scope = "source.cs"
+language-servers = [ "omnisharp" ]

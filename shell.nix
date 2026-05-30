@@ -1,16 +1,27 @@
 { pkgs }:
+let
+  dotnetSdk = pkgs.dotnet-sdk_8;
 
+  nativeLibs = pkgs.lib.makeLibraryPath [
+    pkgs.stdenv.cc.cc
+    pkgs.zlib
+  ];
+in
 pkgs.mkShell {
   buildInputs = [
-    pkgs.dotnet-sdk_8
+    dotnetSdk
     pkgs.microsoft-edge
     pkgs.msedgedriver
     pkgs.ffmpeg-headless
-    pkgs.xorg.xorgserver
+    pkgs.xorgserver
     pkgs.dejavu_fonts
   ];
 
   shellHook = ''
+    export DOTNET_ROOT="${dotnetSdk}/share/dotnet";
+
+    export LD_LIBRARY_PATH="${nativeLibs}:$LD_LIBRARY_PATH"
+    
     # Xvfb display
     export DISPLAY=":99"
 
