@@ -20,7 +20,7 @@
       devShells.${system}.default = import ./shell.nix { inherit pkgs; };
 
       packages.${system} = {
-        dockerImage = import ./docker-build.nix {
+        dockerImage = import .build/docker-build.nix {
           inherit pkgs;
           buildDotnetModule = pkgs.buildDotnetModule;
           dotnetCorePackages = pkgs.dotnetCorePackages;
